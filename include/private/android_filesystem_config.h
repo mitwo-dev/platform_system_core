@@ -93,22 +93,6 @@
 #define AID_QCOM_ONCRPC   3009  /* can read/write /dev/oncrpc files */
 #define AID_QCOM_DIAG     3010  /* can read/write /dev/diag */
 
-#if defined(MOTOROLA_UIDS)
-#define AID_MOT_OSH       5000  /* OSH */
-#define AID_MOT_ACCY      9000  /* access to accessory */
-#define AID_MOT_PWRIC     9001  /* power IC */
-#define AID_MOT_USB       9002  /* mot usb */
-#define AID_MOT_DRM       9003  /* can access DRM resource. */
-#define AID_MOT_TCMD      9004  /* mot_tcmd */
-#define AID_MOT_SEC_RTC   9005  /* mot cpcap rtc */
-#define AID_MOT_TOMBSTONE 9006
-#define AID_MOT_TPAPI     9007  /* mot_tpapi */
-#define AID_MOT_SECCLKD   9008  /* mot_secclkd */
-#define AID_MOT_WHISPER   9009  /* Whisper Protocol access */
-#define AID_MOT_CAIF      9010  /* can create CAIF sockets */
-#define AID_MOT_DLNA      9011  /* DLNA native */
-#endif // MOTOROLA_UIDS
-
 #define AID_MISC          9998  /* access to misc storage */
 #define AID_NOBODY        9999
 
