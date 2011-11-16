@@ -90,9 +90,6 @@ enum {
 #if defined(QCOM_ICS_COMPAT) && defined(QCOM_HARDWARE)
     CAMERA_MSG_STATS_DATA       = 0x800,
     CAMERA_MSG_FOCUS_MOVE = 0x1000,       // notifyCallback
-#elif defined(OMAP_ICS_CAMERA) && defined(OMAP_ENHANCEMENT)
-    CAMERA_MSG_COMPRESSED_BURST_IMAGE = 0x0800, //dataCallback
-    CAMERA_MSG_RAW_BURST = 0x1000,        // dataCallback
 #else
     CAMERA_MSG_FOCUS_MOVE = 0x0800,       // notifyCallback
 #ifdef QCOM_HARDWARE
