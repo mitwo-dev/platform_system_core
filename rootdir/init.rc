@@ -24,6 +24,14 @@ on early-init
     # Create mountpoint so Dalvik can mark as slave in zygotes.
     mount tmpfs tmpfs /storage mode=0050,uid=0,gid=1028
 
+    # Allow system UID to setenforce and set booleans.
+    chown system system /selinux/enforce
+    chown system system /sys/fs/selinux/enforce
+    chown -R system system /selinux/booleans
+    chown -R system system /sys/fs/selinux/booleans
+    chown system system /selinux/commit_pending_bools
+    chown system system /sys/fs/selinux/commit_pending_bools
+
 on init
 
 sysclktz 0
@@ -57,7 +65,7 @@ loglevel 3
 
     mkdir /system
     mkdir /data 0771 system system
-    mkdir /cache 0770 system cache
+    mkdir /cache 0771 system cache
     mkdir /config 0500 root root
 
     # See storage config details at http://source.android.com/tech/storage/
@@ -156,7 +164,7 @@ on post-fs
 
     # We chown/chmod /cache again so because mount is run as root + defaults
     chown system cache /cache
-    chmod 0770 /cache
+    chmod 0771 /cache
     # We restorecon /cache in case the cache partition has been reset.
     restorecon /cache
 
@@ -236,6 +244,7 @@ on post-fs-data
     mkdir /data/property 0700 root root
     mkdir /data/ssh 0750 root shell
     mkdir /data/ssh/empty 0700 root root
+    mkdir /data/radio 0770 radio radio
 
     # create dalvik-cache, so as to enforce our permissions
     mkdir /data/dalvik-cache 0771 system system
@@ -260,7 +269,7 @@ on post-fs-data
     symlink /data/data/com.android.shell/files/bugreports /data/bugreports
 
     # Separate location for storing security policy files on data
-    mkdir /data/security 0700 system system
+    mkdir /data/security 0711 system system
 
     # If there is no fs-post-data action in the init.<device>.rc file, you
     # must uncomment this line, otherwise encrypted filesystems
@@ -331,8 +340,12 @@ on boot
     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
 
     # Assume SMP uses shared cpufreq policy for all CPUs
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-    chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
 
     chown system system /sys/class/timed_output/vibrator/enable
     chown system system /sys/class/leds/keyboard-backlight/brightness
@@ -367,17 +380,18 @@ on boot
 
 # Define TCP buffer sizes for various networks
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
-    setprop net.tcp.buffersize.default 4096,87380,110208,4096,16384,110208
+    setprop net.tcp.buffersize.default 4096,87380,704512,4096,16384,110208
     setprop net.tcp.buffersize.wifi    524288,1048576,2097152,262144,524288,1048576
-    setprop net.tcp.buffersize.lte     524288,1048576,2097152,262144,524288,1048576
-    setprop net.tcp.buffersize.umts    4094,87380,110208,4096,16384,110208
-    setprop net.tcp.buffersize.hspa    4094,87380,262144,4096,16384,262144
-    setprop net.tcp.buffersize.hsupa   4094,87380,262144,4096,16384,262144
-    setprop net.tcp.buffersize.hsdpa   4094,87380,262144,4096,16384,262144
-    setprop net.tcp.buffersize.hspap   4094,87380,1220608,4096,16384,1220608
-    setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
-    setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
-    setprop net.tcp.buffersize.evdo    4094,87380,262144,4096,16384,262144
+    setprop net.tcp.buffersize.lte     4096,87380,1220608,4096,16384,563200
+    setprop net.tcp.buffersize.umts    4096,87380,563200,4096,16384,110208
+    setprop net.tcp.buffersize.hspa    4096,87380,704512,4096,16384,110208
+    setprop net.tcp.buffersize.hsupa   4096,87380,704512,4096,16384,262144
+    setprop net.tcp.buffersize.hsdpa   4096,87380,704512,4096,16384,262144
+    setprop net.tcp.buffersize.hspap   4096,87380,1220608,4096,16384,393216
+    setprop net.tcp.buffersize.edge    4096,26280,35040,4096,16384,35040
+    setprop net.tcp.buffersize.gprs    4096,8760,11680,4096,8760,11680
+    setprop net.tcp.buffersize.evdo    4096,87380,563200,4096,16384,262144
+    setprop net.tcp.buffersize.evdo_b  4096,87380,704512,4096,16384,262144
 
 # Set this property so surfaceflinger is not started by system_init
     setprop system_init.startsurfaceflinger 0
@@ -421,6 +435,8 @@ service ueventd /sbin/ueventd
 on property:selinux.reload_policy=1
     restart ueventd
     restart installd
+    chown -R system system /selinux/booleans
+    chown -R system system /sys/fs/selinux/booleans
 
 service console /system/bin/sh
     class core
@@ -496,7 +512,7 @@ service drm /system/bin/drmserver
 service media /system/bin/mediaserver
     class main
     user media
-    group audio camera inet net_bt net_bt_admin net_bw_acct drmrpc mediadrm
+    group audio camera inet net_bt net_bt_admin net_bw_acct drmrpc qcom_diag mediadrm
     ioprio rt 4
 
 service bootanim /system/bin/bootanimation
