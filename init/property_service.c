@@ -98,6 +98,11 @@ struct {
     { "persist.service.bdroid.", AID_BLUETOOTH,   0 },
     { "selinux."         , AID_SYSTEM,   0 },
     { "net.pdp",          AID_RADIO,    AID_RADIO },
+    { "camera.",          AID_MEDIA,    0 },
+    { "permanent.radio.", AID_RADIO,    0 },
+    { "dolby.audio",      AID_MEDIA,    0 },
+    { "dolby.dm.",        AID_SYSTEM,   0 },
+    { "persist.camera.",  AID_MEDIA,    0 },
 #ifdef PROPERTY_PERMS_APPEND
 PROPERTY_PERMS_APPEND
 #endif
