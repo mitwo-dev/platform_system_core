@@ -87,15 +87,10 @@ enum {
     CAMERA_MSG_PREVIEW_METADATA = 0x0400, // dataCallback
     // Notify on autofocus start and stop. This is useful in continuous
     // autofocus - FOCUS_MODE_CONTINUOUS_VIDEO and FOCUS_MODE_CONTINUOUS_PICTURE.
-#if defined(QCOM_ICS_COMPAT) && defined(QCOM_HARDWARE)
-    CAMERA_MSG_STATS_DATA       = 0x800,
-    CAMERA_MSG_FOCUS_MOVE = 0x1000,       // notifyCallback
-#else
     CAMERA_MSG_FOCUS_MOVE = 0x0800,       // notifyCallback
 #ifdef QCOM_HARDWARE
     CAMERA_MSG_STATS_DATA       = 0x1000,
     CAMERA_MSG_META_DATA = 0x2000,
-#endif
 #endif
     CAMERA_MSG_ALL_MSGS = 0xFFFF
 };
@@ -156,15 +151,6 @@ enum {
      */
     CAMERA_CMD_STOP_FACE_DETECTION = 7,
 
-#if defined(QCOM_ICS_COMPAT) && defined(QCOM_HARDWARE)
-    CAMERA_CMD_HISTOGRAM_ON     = 8,
-    CAMERA_CMD_HISTOGRAM_OFF     = 9,
-    CAMERA_CMD_HISTOGRAM_SEND_DATA  = 10,
-    /* Unused by the older blobs, but referenced */
-    CAMERA_CMD_ENABLE_FOCUS_MOVE_MSG = 11,
-    CAMERA_CMD_PING = 12,
-    CAMERA_CMD_SET_VIDEO_BUFFER_COUNT = 13,
-#else
     /**
      * Enable/disable focus move callback (CAMERA_MSG_FOCUS_MOVE). Passing
      * arg1 = 0 will disable, while passing arg1 = 1 will enable the callback.
@@ -205,7 +191,6 @@ enum {
     CAMERA_CMD_HISTOGRAM_SEND_DATA  = 13,
     CAMERA_CMD_METADATA_ON = 100,
     CAMERA_CMD_METADATA_OFF = 101,
-#endif
 };
 
 /** camera fatal errors */

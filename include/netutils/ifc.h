@@ -68,9 +68,6 @@ extern int ifc_get_info(const char *name, in_addr_t *addr, int *prefixLength,
 extern int ifc_configure(const char *ifname, in_addr_t address,
                          uint32_t prefixLength, in_addr_t gateway,
                          in_addr_t dns1, in_addr_t dns2);
-extern int ifc_get_mtu(const char *name, int *mtuSz);
-extern in_addr_t prefixLengthToIpv4Netmask(int prefix_length);
-extern int ipv4NetmaskToPrefixLength(in_addr_t mask);
 
 extern in_addr_t prefixLengthToIpv4Netmask(int prefix_length);
 
