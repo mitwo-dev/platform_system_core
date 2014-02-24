@@ -101,6 +101,7 @@ struct {
     { "dolby.audio",      AID_MEDIA,    0 },
     { "dolby.dm.",        AID_SYSTEM,   0 },
     { "service.bootanim.exit", AID_GRAPHICS, 0 },
+    { "persist.audio",      AID_SYSTEM,    0 },
     { NULL, 0, 0 }
 };
 
