@@ -5,7 +5,7 @@
 #include <sys/klog.h>
 #include <string.h>
 
-#define FALLBACK_KLOG_BUF_SHIFT	17	/* CONFIG_LOG_BUF_SHIFT from our kernel */
+#define FALLBACK_KLOG_BUF_SHIFT	21	/* CONFIG_LOG_BUF_SHIFT from our kernel */
 #define FALLBACK_KLOG_BUF_LEN	(1 << FALLBACK_KLOG_BUF_SHIFT)
 
 int dmesg_main(int argc, char **argv)
