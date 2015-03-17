@@ -134,6 +134,7 @@ BatteryMonitor::PowerSupplyType BatteryMonitor::readPowerSupplyType(const String
             { "USB_DCP", ANDROID_POWER_SUPPLY_TYPE_AC },
             { "USB_CDP", ANDROID_POWER_SUPPLY_TYPE_AC },
             { "USB_ACA", ANDROID_POWER_SUPPLY_TYPE_AC },
+            { "USB_HVDCP", ANDROID_POWER_SUPPLY_TYPE_AC },
             { "Wireless", ANDROID_POWER_SUPPLY_TYPE_WIRELESS },
             { "Wipower", ANDROID_POWER_SUPPLY_TYPE_WIRELESS },
             { NULL, 0 },
@@ -262,8 +263,7 @@ bool BatteryMonitor::update(void) {
             case ANDROID_POWER_SUPPLY_TYPE_BATTERY:
                 break;
             default:
-                KLOG_WARNING(LOG_TAG, "%s: Unknown power supply type\n",
-                                 name);
+                break;
             } //switch
         } //while
         closedir(dir);
@@ -295,10 +295,10 @@ bool BatteryMonitor::update(void) {
                  "battery none");
         }
 
-        KLOG_INFO(LOG_TAG, "%s chg=%s%s%s\n", dmesgline,
-                  props.chargerAcOnline ? "a" : "",
-                  props.chargerUsbOnline ? "u" : "",
-                  props.chargerWirelessOnline ? "w" : "");
+        KLOG_WARNING(LOG_TAG, "%s chg=%s%s%s\n", dmesgline,
+                     props.chargerAcOnline ? "a" : "",
+                     props.chargerUsbOnline ? "u" : "",
+                     props.chargerWirelessOnline ? "w" : "");
     }
 
     healthd_mode_ops->battery_update(&props);
@@ -542,7 +542,7 @@ void BatteryMonitor::init(struct healthd_config *hc) {
     if (!mChargerNames.size())
         KLOG_ERROR(LOG_TAG, "No charger supplies found\n");
     if (!mBatteryDevicePresent) {
-        KLOG_INFO(LOG_TAG, "No battery devices found\n");
+        KLOG_WARNING(LOG_TAG, "No battery devices found\n");
         hc->periodic_chores_interval_fast = -1;
         hc->periodic_chores_interval_slow = -1;
     } else {
